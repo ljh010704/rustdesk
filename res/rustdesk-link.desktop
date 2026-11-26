@@ -8,4 +8,4 @@ Icon=rustdesk
 Terminal=false
 Type=Application
 StartupNotify=false
-StartupWMClass=zhanqiu-remote
+StartupWMClass=rustdesk
