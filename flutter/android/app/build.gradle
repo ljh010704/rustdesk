@@ -82,7 +82,12 @@ protobuf {
 }
 
 android {
-    namespace "com.zhanqiu.remotecontrol"
+    // NOTE: keep namespace identical to the package attribute of src/main/AndroidManifest.xml
+    // (com.carriez.flutter_hbb), otherwise AGP fails with
+    // "Setting the namespace via the package attribute in the source AndroidManifest.xml is no longer supported".
+    // The Kotlin sources also live in com.carriez.flutter_hbb and reference the generated R class,
+    // so the user-visible rebranding is done via applicationId below, not via namespace.
+    namespace "com.carriez.flutter_hbb"
     compileSdkVersion 36
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
