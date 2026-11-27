@@ -4224,6 +4224,14 @@ List<String> getPrinterNames() {
   }
 }
 
+/// Brand name shown in the UI (window title, mobile app bar, recents card).
+///
+/// The Rust-side `APP_NAME` is intentionally left as "RustDesk": `is_custom_client()`
+/// is defined as `get_app_name() != "RustDesk"`, and turning it on would make the
+/// client require a signed custom.txt that only the upstream private key can produce.
+/// So the visible name is overridden here, in the presentation layer only.
+const String kDisplayAppName = '展秋远程控制';
+
 String _appName = '';
 String get appName {
   if (_appName.isEmpty) {
