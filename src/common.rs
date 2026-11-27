@@ -2515,7 +2515,35 @@ pub fn rustdesk_interval(i: Interval) -> ThrottledInterval {
     ThrottledInterval::new(i)
 }
 
+/// ZhanQiu Remote: built-in self-hosted server config.
+///
+/// This must run for *every* process, not just the Flutter GUI: on Windows the
+/// service (`rustdesk.exe --service`, running as LocalService) owns the peer
+/// registration and has its own config directory, so injecting the server only
+/// in `flutter_ffi::initialize` leaves the service talking to the official
+/// rendezvous server. `load_custom_client()` is the one entry point that the
+/// GUI, the service and the core all call.
+pub fn apply_builtin_server_config() {
+    let cfg = config::Config::get_options();
+    if cfg
+        .get("custom-rendezvous-server")
+        .map_or(true, |v| v.is_empty())
+    {
+        let _ = config::Config::set_option(
+            "custom-rendezvous-server".into(),
+            "27.218.235.47:21116".into(),
+        );
+    }
+    if cfg.get("key").map_or(true, |v| v.is_empty()) {
+        let _ = config::Config::set_option(
+            "key".into(),
+            "0J5AnBsSQcBtcTLPC50HTztWJXCiZz6v5oRMgvRh8VQ=".into(),
+        );
+    }
+}
+
 pub fn load_custom_client() {
+    apply_builtin_server_config();
     #[cfg(debug_assertions)]
     if let Ok(data) = std::fs::read_to_string("./custom.txt") {
         read_custom_client(data.trim());

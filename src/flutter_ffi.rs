@@ -56,21 +56,8 @@ fn initialize(app_dir: &str, custom_client_config: &str) {
         crate::read_custom_client(custom_client_config);
     }
     // === ZhanQiu Remote: built-in self-hosted server config ===
-    {
-        let cfg = config::Config::get_options();
-        if cfg.get("custom-rendezvous-server").map_or(true, |v| v.is_empty()) {
-            let _ = config::Config::set_option(
-                "custom-rendezvous-server".into(),
-                "27.218.235.47:21116".into(),
-            );
-        }
-        if cfg.get("key").map_or(true, |v| v.is_empty()) {
-            let _ = config::Config::set_option(
-                "key".into(),
-                "0J5AnBsSQcBtcTLPC50HTztWJXCiZz6v5oRMgvRh8VQ=".into(),
-            );
-        }
-    }
+    // Applied inside `crate::load_custom_client()` (called just above) so that the
+    // Windows service process gets it too, not only the Flutter GUI.
     // === end built-in config ===
     #[cfg(target_os = "android")]
     {
