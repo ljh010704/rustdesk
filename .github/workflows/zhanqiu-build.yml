@@ -1,0 +1,29 @@
+name: ZhanQiu Build
+
+# Manual-only entry point for the branded build.
+#
+# `flutter-nightly.yml` cannot be used here: GitHub disables `schedule:` workflows
+# in forks, which leaves that workflow in `disabled_manually` state and makes the
+# dispatches API reject it with "Actions has been disabled for this repository".
+# This file has no schedule trigger, so it stays usable.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - zhanqiu-branding
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  build:
+    uses: ./.github/workflows/flutter-build.yml
+    secrets: inherit
+    with:
+      upload-artifact: true
+      upload-tag: "nightly"
